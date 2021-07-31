@@ -1,5 +1,6 @@
 {
     "name": "The 5 Level Game Remastered",
+    "version": "0.1.0",
     "description": "",
     "dependencies": {
         "device": "*"
