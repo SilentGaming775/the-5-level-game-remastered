@@ -185,8 +185,38 @@ info.onLifeZero(function () {
         game.showLongText("You made it to Level " + currentLevel + ". Your score was: " + info.score() + ". New Highscore!", DialogLayout.Full)
         game.reset()
     } else {
-        game.showLongText("You made it to Level " + currentLevel + ". Your score was: " + info.score() + ". Your Highscore is: " + info.highScore(), DialogLayout.Full)
-        game.reset()
+        random_insult = randint(0, 9)
+        if (random_insult == 0) {
+            game.showLongText("You made it to Level " + currentLevel + ". Your score was: " + info.score() + ". Your Highscore is: " + info.highScore() + " i could do better.", DialogLayout.Full)
+            game.reset()
+        } else if (random_insult == 1) {
+            game.showLongText("You made it to Level " + currentLevel + ". Your score was: " + info.score() + ". Your Highscore is: " + info.highScore() + " how do you die in this", DialogLayout.Full)
+            game.reset()
+        } else if (random_insult == 2) {
+            game.showLongText("You made it to Level " + currentLevel + ". Your score was: " + info.score() + ". Your Highscore is: " + info.highScore() + " BRUH.", DialogLayout.Full)
+            game.reset()
+        } else if (random_insult == 3) {
+            game.showLongText("You made it to Level " + currentLevel + ". Your score was: " + info.score() + ". Your Highscore is: " + info.highScore() + "WH- HO- DUDE!!", DialogLayout.Full)
+            game.reset()
+        } else if (random_insult == 4) {
+            game.showLongText("You made it to Level " + currentLevel + ". Your score was: " + info.score() + ". Your Highscore is: " + info.highScore() + " xX420NoscopeXx", DialogLayout.Full)
+            game.reset()
+        } else if (random_insult == 5) {
+            game.showLongText("You made it to Level " + currentLevel + ". Your score was: " + info.score() + ". Your Highscore is: " + info.highScore() + " *rage intensifies*", DialogLayout.Full)
+            game.reset()
+        } else if (random_insult == 6) {
+            game.showLongText("You made it to Level " + currentLevel + ". Your score was: " + info.score() + ". Your Highscore is: " + info.highScore() + " search up HOWTO BETA GAME IASDHAHSODOIAIODAAAAAA)(@*&QASJSASS}A{.", DialogLayout.Full)
+            game.reset()
+        } else if (random_insult == 7) {
+            game.showLongText("You made it to Level " + currentLevel + ". Your score was: " + info.score() + ". Your Highscore is: " + info.highScore() + " number 15: rage has taken over my body", DialogLayout.Full)
+            game.reset()
+        } else if (random_insult == 8) {
+            game.showLongText("You made it to Level " + currentLevel + ". Your score was: " + info.score() + ". Your Highscore is: " + info.highScore() + " bepis", DialogLayout.Full)
+            game.reset()
+        } else {
+            game.showLongText("You made it to Level " + currentLevel + ". Your score was: " + info.score() + ". Your Highscore is: " + info.highScore() + " TRIGGERED", DialogLayout.Full)
+            game.reset()
+        }
     }
 })
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite, otherSprite) {
@@ -198,6 +228,7 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite, otherSp
         info.changeLifeBy(-1)
     }
 })
+let random_insult = 0
 let myEnemy: Sprite = null
 let currentLevel = 0
 let mySprite: Sprite = null
