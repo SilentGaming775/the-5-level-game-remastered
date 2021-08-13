@@ -379,6 +379,7 @@ scene.onOverlapTile(SpriteKind.Player, assets.tile`tile2`, function (sprite, loc
         "Deathwish",
         "Die 30 times."
         )
+        blockSettings.writeString("deathwish", "")
     }
     game.reset()
 })
@@ -390,6 +391,7 @@ info.onLifeZero(function () {
         "Deathwish",
         "Die 30 times."
         )
+        blockSettings.writeString("deathwish", "")
     }
     game.reset()
 })
