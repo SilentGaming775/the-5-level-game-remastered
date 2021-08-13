@@ -6,7 +6,12 @@ scene.onOverlapTile(SpriteKind.Player, assets.tile`tile4`, function (sprite, loc
     }
 })
 function menu () {
-    blockMenu.showMenu(["Play", "what is this", "How-to-play", "Achievements"], MenuStyle.Grid, MenuLocation.BottomHalf)
+    blockMenu.showMenu([
+    "Play",
+    "what is this",
+    "How-to-play",
+    "Achievements"
+    ], MenuStyle.Grid, MenuLocation.BottomHalf)
     if (Achievements.checkForAchievement("Noice", true)) {
         Achievements.showAchievement(
         "Noice",
@@ -39,7 +44,7 @@ function start_next_level () {
         scene.setBackgroundColor(2)
         tiles.setTilemap(tilemap`level10`)
     } else {
-        blockSettings.writeString("game finish", textSprite)
+        blockSettings.writeString("game finish", "")
         game.reset()
     }
     for (let value2 of tiles.getTilesByType(assets.tile`tile5`)) {
@@ -372,19 +377,24 @@ controller.right.onEvent(ControllerButtonEvent.Pressed, function () {
     }
 })
 scene.onOverlapTile(SpriteKind.Player, assets.tile`tile2`, function (sprite, location) {
-    deaths += 1
+    deaths += blockSettings.readNumber("deaths") + 1
     blockSettings.writeNumber("deaths", deaths)
-    if (Achievements.checkForAchievement("Deathwish", blockSettings.readNumber("deaths") == 30)) {
+    if (Achievements.checkForAchievement("Deathwish", blockSettings.readNumber("deaths") == 30 || blockSettings.readNumber("deaths") > 30)) {
         Achievements.showAchievement(
         "Deathwish",
         "Die 30 times."
         )
         blockSettings.writeString("deathwish", "")
     }
-    game.reset()
+    if (game.ask("Continue", "or give up?")) {
+        info.setLife(3)
+        set_level_to()
+    } else {
+        game.reset()
+    }
 })
 info.onLifeZero(function () {
-    deaths += 1
+    deaths += blockSettings.readNumber("deaths") + 1
     blockSettings.writeNumber("deaths", deaths)
     if (Achievements.checkForAchievement("Deathwish", blockSettings.readNumber("deaths") == 30)) {
         Achievements.showAchievement(
@@ -393,7 +403,11 @@ info.onLifeZero(function () {
         )
         blockSettings.writeString("deathwish", "")
     }
-    game.reset()
+    if (game.ask("Continue", "or give up?")) {
+        set_level_to()
+    } else {
+        game.reset()
+    }
 })
 function MOAR () {
     for (let value of sprites.allOfKind(SpriteKind.Enemy)) {
@@ -570,6 +584,15 @@ function MOAR () {
     }
     tiles.placeOnRandomTile(mySprite, assets.tile`tile3`)
 }
+function set_level_to () {
+    if (blockSettings.exists("Pack 2")) {
+        currentLevelp2 += -1
+        MOAR()
+    } else {
+        currentLevel += -1
+        start_next_level()
+    }
+}
 blockMenu.onMenuOptionSelected(function (option, index) {
     if (blockMenu.isMenuOpen()) {
         if (option == "How-to-play") {
@@ -711,6 +734,7 @@ blockMenu.onMenuOptionSelected(function (option, index) {
             blockMenu.closeMenu()
             game_start()
         } else if (option == "Level Pack 2") {
+            let textSprite = ""
             blockMenu.closeMenu()
             blockSettings.writeString("Pack 2", textSprite)
             game_start()
@@ -729,7 +753,7 @@ blockMenu.onMenuOptionSelected(function (option, index) {
             if (blockSettings.exists("deathwish")) {
                 game.showLongText("Die 30 times to complete. Status: Completed", DialogLayout.Bottom)
             } else {
-                game.showLongText("Die 30 times to complete. Status: Not Completed", DialogLayout.Bottom)
+                game.showLongText("Die 30 times to complete. Status: Not Completed" + " Death Count: " + blockSettings.readNumber("deaths"), DialogLayout.Bottom)
             }
         } else if (option == "Noice") {
             if (blockSettings.exists("noice")) {
@@ -764,7 +788,7 @@ blockMenu.onMenuOptionSelected(function (option, index) {
             if (blockSettings.exists("box hunter")) {
                 game.showLongText("Jump on 100 boxes to complete: Status: Completed", DialogLayout.Bottom)
             } else {
-                game.showLongText("Jump on 100 boxes to complete: Status: Not Completed", DialogLayout.Bottom)
+                game.showLongText("Jump on 100 boxes to complete: Status: Not Completed" + " Boxes Killed: " + blockSettings.readNumber("number of boxes killed"), DialogLayout.Bottom)
             }
         } else {
             blockMenu.closeMenu()
@@ -778,7 +802,7 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite, otherSp
         otherSprite.destroy(effects.fire, 100)
         if (sprite.bottom < otherSprite.y) {
             sprite.vy = -100
-            boxes += 1
+            boxes += blockSettings.readNumber("number of boxes killed") + 1
             blockSettings.writeNumber("number of boxes killed", boxes)
             if (Achievements.checkForAchievement("Box Hunter", blockSettings.readNumber("number of boxes killed") == 100)) {
                 Achievements.showAchievement(
@@ -798,7 +822,6 @@ let boxes = 0
 let currentLevelp2 = 0
 let deaths = 0
 let myEnemy: Sprite = null
-let textSprite = ""
 let currentLevel = 0
 let mySprite: Sprite = null
 blockSettings.remove("Pack 2")
